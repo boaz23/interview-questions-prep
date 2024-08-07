@@ -13,8 +13,7 @@ only in the values range:
 template<
 	typename T,
 	typename = typename std::enable_if<
-		std::is_arithmetic<T>::value &&
-		std::is_signed<T>::value,
+		std::is_arithmetic<T>::value,
 		T
 	>::type
 >
@@ -39,8 +38,7 @@ void dnf1(T arr[], size_t n) noexcept {
 template<
 	typename T,
 	typename = typename std::enable_if<
-		std::is_arithmetic<T>::value &&
-		std::is_signed<T>::value,
+		std::is_arithmetic<T>::value,
 		T
 	>::type
 >
