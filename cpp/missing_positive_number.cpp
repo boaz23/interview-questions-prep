@@ -93,6 +93,9 @@ T find_missing_positive_number2(T arr[], size_t n) noexcept {
 #define find_missing_positive_number find_missing_positive_number2
 
 int main(int argc, char *argv[]) {
+	(void)argc;
+	(void)argv;
+
 	Tester<int> tester{std::function<int(int[], size_t)>{
 		find_missing_positive_number<int>
 	}};

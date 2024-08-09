@@ -89,9 +89,12 @@ void dnf(T arr[], size_t n) noexcept {
 }
 
 int main(int argc, char *argv[]) {
+	(void)argc;
+	(void)argv;
+
 	Tester<int> tester{dnf<int>};
 
-	tester.test(std::array<int, 0>{ }, { });
+	tester.test({ }, std::array<int, 0>{ });
 	tester.test(std::array{ 0, -1, 1, }, { -1, 0, 1, });
 	tester.test(std::array{ 0, 1, -1, }, { -1, 0, 1, });
 	tester.test(std::array{ 1, 1, -1, }, { -1, 1, 1, });
