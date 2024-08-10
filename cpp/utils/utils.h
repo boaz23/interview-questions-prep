@@ -5,12 +5,11 @@
 #include <assert.h>
 
 template <typename T, std::size_t N>
-std::ostream& operator<<(std::ostream& o, const std::array<T, N>& arr)
-{
-	o << "{ ";
-	std::copy(arr.cbegin(), arr.cend(), std::ostream_iterator<T>(o, ", "));
-	o << " }";
-	return o;
+std::ostream& operator<<(std::ostream& os, const std::array<T, N>& arr) {
+	os << "{ ";
+	std::copy(arr.cbegin(), arr.cend(), std::ostream_iterator<T>(os, ", "));
+	os << " }";
+	return os;
 }
 
 template<typename T>
@@ -89,50 +88,3 @@ public:
 		return _failed_count;
 	}
 };
-
-template <typename TInt>
-[[nodiscard]] constexpr int cmp(TInt a, TInt b) noexcept {
-	static_assert(std::is_integral_v<TInt>);
-
-	return
-		(a <  b) ? -1 :
-		(a == b) ?  0 :
-		1;
-}
-
-template <typename TIntA, typename TIntB>
-[[nodiscard]] constexpr int cmp(TIntA a, TIntB b) noexcept {
-	static_assert(std::is_integral_v<TIntA>);
-	static_assert(std::is_integral_v<TIntB>);
-
-	if constexpr(sizeof(TIntA) <= sizeof(TIntB)) {
-		if constexpr(std::is_signed_v<TIntA> == std::is_signed_v<TIntB>) {
-			return cmp(static_cast<TIntB>(a), b);
-		}
-		else if constexpr(std::is_signed_v<TIntA> && !std::is_signed_v<TIntB>) {
-			// A is   signed
-			// B is unsigned
-			return (a < 0) ? -1 : cmp(static_cast<TIntB>(a), b);
-		}
-		else /*if constexpr(!std::is_signed_v<TIntA> && std::is_signed_v<TIntB>)*/ {
-			// A is unsigned
-			// B is   signed
-			if constexpr(sizeof(TIntA) == sizeof(TIntB)) {
-				return (b < 0) ? 1 : cmp(a, static_cast<TIntA>(b));
-			}
-			else {
-				return cmp(static_cast<TIntB>(a), b);
-			}
-		}
-	}
-	else {
-		if constexpr(std::is_signed_v<TIntA> || !std::is_signed_v<TIntB>) {
-			return cmp(a, static_cast<TIntA>(b));
-		}
-		else if constexpr(std::is_signed_v<TIntB>) {
-			// A is unsigned
-			// B is   signed
-			return (b < 0) ? 1 : cmp(a, static_cast<TIntA>(b));
-		}
-	}
-}

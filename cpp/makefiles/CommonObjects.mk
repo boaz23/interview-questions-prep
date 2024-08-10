@@ -12,8 +12,13 @@ $(1)_dir_path_src = $(strip $(3))
 $(1)_inc_dirs = $(strip $(4))
 # parameters end
 
-$(1)_SRCS = $$(wildcard $$($(1)_dir_path_src)/*.$(SRC_EXT))
-$(1)_SRC_BASE_NAMES = $$(foreach src,$$($(1)_SRCS),$$(basename $$(notdir $$(src))))
+$(1)_SRCS = $$(shell find\
+	"$$($(1)_dir_path_src)"\
+	-name "*.$(SRC_EXT)"\
+	-type f\
+	| sort\
+)
+$(1)_SRC_BASE_NAMES = $$($(1)_SRCS:$$($(1)_dir_path_src)/%.$(SRC_EXT)=%)
 
 $(1)_targets_prefix_post_seped=$$($(1)_targets_prefix:%=%/)
 $(1)_TARGETS = $$(foreach name,$$($(1)_SRC_BASE_NAMES),$$($(1)_targets_prefix_post_seped)$$(name))
