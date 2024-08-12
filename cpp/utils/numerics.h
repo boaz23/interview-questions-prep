@@ -272,12 +272,15 @@ numerical<T> operator-(const numerical<T>& n) {
 	};
 }
 
-template<typename T> inline constexpr
-numerical<T> std::abs(const numerical<T>& n) {
-	return numerical<T>{
-		std::abs(n.value_kind()),
-		std::abs(*n),
-	};
+
+namespace std {
+	template <typename T>
+	inline constexpr numerical<T> abs(const numerical<T>& n) {
+		return numerical<T>{
+			std::abs(n.value_kind()),
+			std::abs(*n),
+		};
+	}
 }
 
 #ifdef _DEFINE_BIN_OP

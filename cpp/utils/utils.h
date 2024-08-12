@@ -1,14 +1,31 @@
 #include <array>
+#include <vector>
 #include <iostream>
 #include <iterator>
 #include <functional>
 #include <assert.h>
 
-template <typename T, std::size_t N>
-std::ostream& operator<<(std::ostream& os, const std::array<T, N>& arr) {
+template<typename T>
+struct _has_const_iterator {
+private:
+    template<typename C> static char test(typename C::const_iterator*);
+    template<typename C> static int  test(...);
+public:
+    enum { value = sizeof(test<T>(0)) == sizeof(char) };
+};
+
+template <
+	typename TContainer,
+	typename = typename std::enable_if<_has_const_iterator<TContainer>::value, void>::type
+>
+std::ostream& operator<<(std::ostream& os, const TContainer& container) {
 	os << "{ ";
-	std::copy(arr.cbegin(), arr.cend(), std::ostream_iterator<T>(os, ", "));
-	os << " }";
+	std::copy(
+		container.cbegin(),
+		container.cend(),
+		std::ostream_iterator<typename TContainer::value_type>(os, ", ")
+	);
+	os << "}";
 	return os;
 }
 
