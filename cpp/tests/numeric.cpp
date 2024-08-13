@@ -1,6 +1,6 @@
 #include <iostream>
 #include <functional>
-#include "numerics.h"
+#include "numerics.hpp"
 
 #define print_test_value(_v)\
 	std::cout << #_v << " = " << (_v) << std::endl;
@@ -68,24 +68,24 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 
-	numerical<int> inf = numerical<int>::positive_infinity();
-	numerical<int> ninf = numerical<int>::negative_infinity();
+	infable_int<int> inf = infable_int<int>::positive_infinity();
+	infable_int<int> ninf = infable_int<int>::negative_infinity();
 
-	print_test_value(numerical<long>{INT64_MAX} < numerical<long>::positive_infinity());
-	print_test_value(numerical<int>{3635} + numerical<int>::positive_infinity());
+	print_test_value(infable_int<long>{INT64_MAX} < infable_int<long>::positive_infinity());
+	print_test_value(infable_int<int>{3635} + infable_int<int>::positive_infinity());
 	try {
-		print_test_value(numerical<long>::negative_infinity() + numerical<long>::positive_infinity());
+		print_test_value(infable_int<long>::negative_infinity() + infable_int<long>::positive_infinity());
 	}
 	catch (const undefined_arithmetic_value &e) {
 		std::cout << e.what() << std::endl;
 	}
 	std::cout << std::endl;
 
-	print_test_value(std::is_signed<numerical<int>>::value);
-	print_test_value(std::is_signed<numerical<unsigned int>>::value);
+	print_test_value(std::is_signed<infable_int<int>>::value);
+	print_test_value(std::is_signed<infable_int<unsigned int>>::value);
 	print_test_value(std::is_signed<numerical_value_kind_t>::value);
-	print_test_value(std::is_arithmetic<numerical<int>>::value);
-	print_test_value(std::is_arithmetic<numerical<unsigned int>>::value);
+	print_test_value(std::is_arithmetic<infable_int<int>>::value);
+	print_test_value(std::is_arithmetic<infable_int<unsigned int>>::value);
 	print_test_value(std::is_arithmetic<int>::value);
 	print_test_value(std::is_arithmetic<unsigned int>::value);
 	print_test_value(signum(-20));
@@ -97,36 +97,36 @@ int main(int argc, char *argv[]) {
 	print_test_value(signum(NUMBERICAL_VALUE_KIND_VALUE));
 	print_test_value(signum(NUMBERICAL_VALUE_KIND_POSITIVE_INFINITY));
 	print_test_value(NUMBERICAL_VALUE_KIND_NEGATIVE_INFINITY);
-	print_test_value(numerical<int>::positive_infinity());
-	print_test_value(numerical<int>::negative_infinity());
-	print_test_value(-numerical<int>::positive_infinity());
-	print_test_value(-numerical<int>::negative_infinity());
-	print_test_value(-numerical<int>{10});
-	print_test_value(-numerical<int>{-12});
-	print_test_value(std::abs(numerical<int>{10}));
-	print_test_value(std::abs(numerical<int>{-12}));
+	print_test_value(infable_int<int>::positive_infinity());
+	print_test_value(infable_int<int>::negative_infinity());
+	print_test_value(-infable_int<int>::positive_infinity());
+	print_test_value(-infable_int<int>::negative_infinity());
+	print_test_value(-infable_int<int>{10});
+	print_test_value(-infable_int<int>{-12});
+	print_test_value(std::abs(infable_int<int>{10}));
+	print_test_value(std::abs(infable_int<int>{-12}));
 	print_test_value(std::abs(inf));
 	print_test_value(std::abs(ninf));
-	print_test_value(static_cast<numerical<int>>((int)-8));
-	print_test_value(static_cast<int>(numerical<int>{-8}));
-	print_test_value(numerical<int>{40} + numerical<int>{18});
-	print_test_value(numerical<int>{40} % numerical<int>{18});
-	print_test_value(numerical<int>{40} / inf);
-	print_test_value(numerical<int>{40} % inf);
-	print_test_value(inf / numerical<int>{7});
-	print_test_value(inf % numerical<int>{7});
-	print_test_value(inf / numerical<int>{-7});
-	print_test_value(inf % numerical<int>{-7});
-	print_test_value(ninf / numerical<int>{7});
-	print_test_value(ninf % numerical<int>{7});
-	print_test_value(ninf / numerical<int>{-7});
-	print_test_value(ninf % numerical<int>{-7});
-	print_test_value(div_mod_rev(numerical<int>{24},  numerical<int>{7}));
-	print_test_value(div_mod_rev(inf,  numerical<int>{7}));
-	print_test_value(div_mod_rev(inf,  numerical<int>{-7}));
-	print_test_value(div_mod_rev(ninf, numerical<int>{7}));
-	print_test_value(div_mod_rev(ninf, numerical<int>{-7}));
-	numerical<int> a = 18;
+	print_test_value(static_cast<infable_int<int>>((int)-8));
+	print_test_value(static_cast<int>(infable_int<int>{-8}));
+	print_test_value(infable_int<int>{40} + infable_int<int>{18});
+	print_test_value(infable_int<int>{40} % infable_int<int>{18});
+	print_test_value(infable_int<int>{40} / inf);
+	print_test_value(infable_int<int>{40} % inf);
+	print_test_value(inf / infable_int<int>{7});
+	print_test_value(inf % infable_int<int>{7});
+	print_test_value(inf / infable_int<int>{-7});
+	print_test_value(inf % infable_int<int>{-7});
+	print_test_value(ninf / infable_int<int>{7});
+	print_test_value(ninf % infable_int<int>{7});
+	print_test_value(ninf / infable_int<int>{-7});
+	print_test_value(ninf % infable_int<int>{-7});
+	print_test_value(div_mod_rev(infable_int<int>{24},  infable_int<int>{7}));
+	print_test_value(div_mod_rev(inf,  infable_int<int>{7}));
+	print_test_value(div_mod_rev(inf,  infable_int<int>{-7}));
+	print_test_value(div_mod_rev(ninf, infable_int<int>{7}));
+	print_test_value(div_mod_rev(ninf, infable_int<int>{-7}));
+	infable_int<int> a = 18;
 	a += 2;
 	print_test_value(a);
 
@@ -134,8 +134,8 @@ int main(int argc, char *argv[]) {
 	test_print_div_mode(5, 3);
 
 	// print_test_value(div_mod_rev(ninf, 7));
-	// print_test_value(numerical<int>{40} + 18);
-	// print_test_value(typeid(numerical<int>{40} + 18).name());
+	// print_test_value(infable_int<int>{40} + 18);
+	// print_test_value(typeid(infable_int<int>{40} + 18).name());
 	// print_test_value(ninf + 0);
 	// print_test_value(cmp(1u, ninf));
 

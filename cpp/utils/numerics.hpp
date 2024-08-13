@@ -1,3 +1,6 @@
+#ifndef _NUMERICS_HPP
+#define _NUMERICS_HPP
+
 #include <type_traits>
 #include <string>
 #include <exception>
@@ -75,14 +78,14 @@ template<
 	typename T,
 	typename = typename std::enable_if<std::is_integral<T>::value, T>::type
 >
-class numerical {
+class infable_int {
 protected:
 	int _value_kind;
 	T _value;
 
 	static inline std::string build_undefined_value_exception_message(
-		const numerical<T>& v1,
-		const numerical<T>& v2,
+		const infable_int<T>& v1,
+		const infable_int<T>& v2,
 		char c
 	) {
 		std::ostringstream oss{};
@@ -91,27 +94,27 @@ protected:
 	}
 
 public:
-	numerical(numerical_value_kind_t value_kind) :
+	infable_int(numerical_value_kind_t value_kind) :
 		_value_kind{signum((int)value_kind)},
 		_value{}
 	{}
 
-	numerical(int value_kind, T value) :
+	infable_int(int value_kind, T value) :
 		_value_kind{signum(value_kind)},
 		_value{value}
 	{}
 
-	numerical() : numerical(NUMBERICAL_VALUE_KIND_VALUE) {}
-	numerical(T value) : numerical(NUMBERICAL_VALUE_KIND_VALUE, value) {}
+	infable_int() : infable_int(NUMBERICAL_VALUE_KIND_VALUE) {}
+	infable_int(T value) : infable_int(NUMBERICAL_VALUE_KIND_VALUE, value) {}
 
-	static constexpr numerical<T> positive_infinity() {
-		return numerical(NUMBERICAL_VALUE_KIND_POSITIVE_INFINITY);
+	static constexpr infable_int<T> positive_infinity() {
+		return infable_int(NUMBERICAL_VALUE_KIND_POSITIVE_INFINITY);
 	}
 
-	static constexpr numerical<T> negative_infinity() {
+	static constexpr infable_int<T> negative_infinity() {
 		static_assert(std::is_signed<T>::value);
 
-		return numerical(NUMBERICAL_VALUE_KIND_NEGATIVE_INFINITY);
+		return infable_int(NUMBERICAL_VALUE_KIND_NEGATIVE_INFINITY);
 	}
 
 	constexpr inline int value_kind() const noexcept { return _value_kind; }
@@ -134,7 +137,7 @@ public:
 		return _value;
 	}
 
-	numerical<T>& operator+=(const numerical<T>& value) {
+	infable_int<T>& operator+=(const infable_int<T>& value) {
 		if (is_finite()) {
 			if (is_finite()) {
 				_value += value._value;
@@ -150,13 +153,13 @@ public:
 		return *this;
 	}
 
-	numerical<T>& operator*=(const numerical<T>& value) {
+	infable_int<T>& operator*=(const infable_int<T>& value) {
 		if (is_finite() && value.is_finite()) {
 			_value *= value._value;
 		}
 		else if (
-			(*this == numerical<T>{0}) ||
-			(value == numerical<T>{0})
+			(*this == infable_int<T>{0}) ||
+			(value == infable_int<T>{0})
 		) {
 			throw undefined_arithmetic_value(
 				build_undefined_value_exception_message(*this, value, '*')
@@ -173,12 +176,12 @@ public:
 		return *this;
 	}
 
-	inline constexpr numerical<T>& operator-=(const numerical<T>& value) {
+	inline constexpr infable_int<T>& operator-=(const infable_int<T>& value) {
 		return *this += (-value);
 	}
 
-	numerical<T>& operator/=(const numerical<T>& value) {
-		if (value == numerical<T>{0}) {
+	infable_int<T>& operator/=(const infable_int<T>& value) {
+		if (value == infable_int<T>{0}) {
 			throw undefined_arithmetic_value("Division by 0");
 		}
 
@@ -202,8 +205,8 @@ public:
 		return *this;
 	}
 
-	numerical<T>& operator%=(const numerical<T>& value) {
-		if (value == numerical<T>{0}) {
+	infable_int<T>& operator%=(const infable_int<T>& value) {
+		if (value == infable_int<T>{0}) {
 			throw undefined_arithmetic_value("Division by 0");
 		}
 
@@ -225,11 +228,11 @@ public:
 	}
 };
 
-template<typename T> struct std::is_signed<numerical<T>>     : std::is_signed<T> {};
-template<typename T> struct std::is_arithmetic<numerical<T>> : std::is_arithmetic<T> {};
+template<typename T> struct std::is_signed<infable_int<T>>     : std::is_signed<T> {};
+template<typename T> struct std::is_arithmetic<infable_int<T>> : std::is_arithmetic<T> {};
 
 template<typename T> inline constexpr
-bool operator==(const numerical<T>& n1, const numerical<T>& n2) {
+bool operator==(const infable_int<T>& n1, const infable_int<T>& n2) {
 	if (n1.value_kind() != n2.value_kind()) {
 		return false;
 	}
@@ -242,12 +245,12 @@ bool operator==(const numerical<T>& n1, const numerical<T>& n2) {
 }
 
 template<typename T> inline constexpr
-bool operator!=(const numerical<T>& n1, const numerical<T>& n2) {
+bool operator!=(const infable_int<T>& n1, const infable_int<T>& n2) {
 	return !(n1 == n2);
 }
 
 template<typename T> inline
-bool operator<(const numerical<T>& n1, const numerical<T>& n2) {
+bool operator<(const infable_int<T>& n1, const infable_int<T>& n2) {
 	if (n1.is_finite() && n2.is_finite()) {
 		return *n1 < *n2;
 	}
@@ -255,18 +258,18 @@ bool operator<(const numerical<T>& n1, const numerical<T>& n2) {
 	return n1.value_kind() < n2.value_kind();
 }
 
-template<typename T> inline constexpr bool operator> (const numerical<T>& n1, const numerical<T>& n2) { return   n2 < n1;  }
-template<typename T> inline constexpr bool operator<=(const numerical<T>& n1, const numerical<T>& n2) { return !(n1 > n2); }
-template<typename T> inline constexpr bool operator>=(const numerical<T>& n1, const numerical<T>& n2) { return !(n1 < n2); }
+template<typename T> inline constexpr bool operator> (const infable_int<T>& n1, const infable_int<T>& n2) { return   n2 < n1;  }
+template<typename T> inline constexpr bool operator<=(const infable_int<T>& n1, const infable_int<T>& n2) { return !(n1 > n2); }
+template<typename T> inline constexpr bool operator>=(const infable_int<T>& n1, const infable_int<T>& n2) { return !(n1 < n2); }
 
 template<typename T> inline constexpr
-numerical<T> operator+(const numerical<T>& n) { return n; }
+infable_int<T> operator+(const infable_int<T>& n) { return n; }
 
 template<typename T> inline constexpr
-numerical<T> operator-(const numerical<T>& n) {
+infable_int<T> operator-(const infable_int<T>& n) {
 	static_assert(std::is_signed<T>::value);
 
-	return numerical<T>{
+	return infable_int<T>{
 		-n.value_kind(),
 		-(*n),
 	};
@@ -275,8 +278,8 @@ numerical<T> operator-(const numerical<T>& n) {
 
 namespace std {
 	template <typename T>
-	inline constexpr numerical<T> abs(const numerical<T>& n) {
-		return numerical<T>{
+	inline constexpr infable_int<T> abs(const infable_int<T>& n) {
+		return infable_int<T>{
 			std::abs(n.value_kind()),
 			std::abs(*n),
 		};
@@ -288,8 +291,8 @@ namespace std {
 #else
 #define _DEFINE_BIN_OP(_op)\
 template<typename T> inline constexpr const \
-numerical<T> operator _op(const numerical<T>& n1, const numerical<T>& n2) {\
-	numerical<T> placeholder = n1;\
+infable_int<T> operator _op(const infable_int<T>& n1, const infable_int<T>& n2) {\
+	infable_int<T> placeholder = n1;\
 	placeholder _op##= n2;\
 	return placeholder;\
 }
@@ -306,13 +309,13 @@ _DEFINE_BIN_OP(%)
 template<typename T, typename TChar, class Traits>
 std::basic_ostream<TChar, Traits>& operator<<(
 	std::basic_ostream<TChar, Traits>& os,
-	const numerical<T>& n
+	const infable_int<T>& n
 ) {
 	if (n.is_finite()) {
 		os << *n;
 	}
 	else {
-		if (n < numerical<T>{0}) {
+		if (n < infable_int<T>{0}) {
 			os << "-";
 		}
 		os << "inf";
@@ -367,3 +370,5 @@ template <typename TIntA, typename TIntB>
 		}
 	}
 }
+
+#endif

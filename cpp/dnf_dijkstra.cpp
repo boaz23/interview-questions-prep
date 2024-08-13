@@ -8,7 +8,7 @@ only in the values range:
 */
 
 #include <type_traits>
-#include "utils.h"
+#include "arrays.hpp"
 
 template<
 	typename T,
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 
-	Tester<int> tester{dnf<int>};
+	ArrayTester<int, void> tester{dnf<int>};
 
 	tester.test({ }, std::array<int, 0>{ });
 	tester.test(std::array{ 0, -1, 1, }, { -1, 0, 1, });

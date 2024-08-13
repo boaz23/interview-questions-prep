@@ -1,5 +1,5 @@
-#include "utils.h"
-#include "numerics.h"
+#include "arrays.hpp"
+#include "numerics.hpp"
 
 // My solution
 template<
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 	(void)argc;
 	(void)argv;
 
-	Tester<int> tester{std::function<int(int[], size_t)>{
+	ArrayTester<int, int> tester{std::function<int(int[], size_t)>{
 		find_missing_positive_number<int>
 	}};
 
