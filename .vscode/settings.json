@@ -72,5 +72,7 @@
 		"valarray": "cpp",
 		"variant": "cpp",
 		"*.ipp": "cpp"
-	}
+	},
+	"makefile.makeDirectory": "cpp",
+	"C_Cpp.default.compilerPath": "/usr/bin/g++"
 }
