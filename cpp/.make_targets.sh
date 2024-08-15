@@ -6,7 +6,7 @@ print_phony_targets() {
 	local -a phony_targets
 	phony_targets=(
 		$(
-			make -npq "$@" .DEFAULT 2> /dev/null |\
+			make -npq "$@" |\
 			sed -nE 's/^\.PHONY:(.*)$/\1/p' |\
 			tail -1
 		)

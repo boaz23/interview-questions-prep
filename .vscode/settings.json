@@ -74,5 +74,11 @@
 		"*.ipp": "cpp"
 	},
 	"makefile.makeDirectory": "cpp",
-	"C_Cpp.default.compilerPath": "/usr/bin/g++"
+	"C_Cpp.default.compilerPath": "/usr/bin/g++",
+	"makefile.panel.visibility": {
+		"run": true,
+		"debug": true
+	},
+	"makefile.phonyOnlyTargets": true,
+	"makefile.compileCommandsPath": ""
 }
