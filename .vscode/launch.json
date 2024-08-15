@@ -8,7 +8,7 @@
 			"name": "(gdb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/cpp/out/leetcode/q4",
+			"program": "${workspaceFolder}/cpp/out/leetcode/q1",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
