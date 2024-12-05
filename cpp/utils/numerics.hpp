@@ -142,12 +142,23 @@ public:
 			if (is_finite()) {
 				_value += value._value;
 			}
+
+			/*
+			finite + any = <kind of any> #(preseves "infinity-ness"):
+				* finite + (-inf) = -inf
+				* finite + finite = finite
+				* finite + inf    = inf
+			*/
 			_value_kind = value.value_kind();
 		}
 		else if (value_kind() == -value.value_kind()) {
+			// inf + (-inf) = undefined
 			throw undefined_arithmetic_value(
 				build_undefined_value_exception_message(*this, value, '+')
 			);
+		}
+		else {
+			// inf + finite = inf #(changes nothing)
 		}
 
 		return *this;
@@ -161,15 +172,18 @@ public:
 			(*this == infable_int<T>{0}) ||
 			(value == infable_int<T>{0})
 		) {
+			// inf * 0 = undefined
 			throw undefined_arithmetic_value(
 				build_undefined_value_exception_message(*this, value, '*')
 			);
 		}
 
 		if (is_finite()) {
+			// finite * inf = inf
 			_value_kind = value.value_kind() * signum(*this);
 		}
 		else {
+			// inf * finite = inf #(sign behaves like normal multiplication)
 			_value_kind *= signum(value);
 		}
 
@@ -190,15 +204,18 @@ public:
 				_value /= value._value;
 			}
 			else {
+				// finite / inf = 0
 				_value = 0;
 			}
 		}
 		else if (!value.is_finite()) {
+			// inf / inf = undefined
 			throw undefined_arithmetic_value(
 				build_undefined_value_exception_message(*this, value, '/')
 			);
 		}
 		else {
+			// inf / finite = inf #(sign behaves like normal division)
 			_value_kind *= signum(value);
 		}
 
@@ -207,6 +224,7 @@ public:
 
 	infable_int<T>& operator%=(const infable_int<T>& value) {
 		if (value == infable_int<T>{0}) {
+			// any / 0 = undefined
 			throw undefined_arithmetic_value("Division by 0");
 		}
 
@@ -215,10 +233,12 @@ public:
 				_value %= value._value;
 			}
 			else {
+				// finite % inf = 0
 				_value = 0;
 			}
 		}
 		else if (!value.is_finite()) {
+			// inf % inf = undefined
 			throw undefined_arithmetic_value(
 				build_undefined_value_exception_message(*this, value, '%')
 			);
