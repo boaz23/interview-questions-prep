@@ -3,7 +3,7 @@ MY_MAKEFLAGS =\
 	-f makefiles/Makefile\
 	-Imakefiles/
 
-TARGETS = $(shell ./.make_targets.sh $(MY_MAKEFLAGS))
+TARGETS = $(shell ./make_targets.sh $(MY_MAKEFLAGS))
 
 .PHONY: no_target all compile_commands
 
